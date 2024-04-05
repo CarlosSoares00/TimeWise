@@ -1,9 +1,10 @@
+import { useState } from 'react';
 import { IoAddCircleOutline } from 'react-icons/io5'
 import * as G from './Goals'
 
 
 const DEFAULT_OPTION_CATEGORIES = [ "Estudo", "Foco", "Trabalho" ]
-const DEFAULT_OPTION_STATUS = [ "Em Progresso", "Completado"]
+const DEFAULT_OPTION_STATUS = ["Em Progresso", "Concluído", "Atrasado"];
 const DEFAULT_PROJECTS = [
     {
         id: 0,
@@ -22,6 +23,19 @@ const DEFAULT_PROJECTS = [
 ]
 
 function Goals() {
+    const [nomeProjeto, setNomeProjeto] = useState('');
+    const [categoriaSelecionada, setCategoriaSelecionada] = useState('');
+    const [statusSelecionado, setStatusSelecionado] = useState('');
+
+    // Função para lidar com a submissão do formulário
+    const handleSubmit = (e) => {
+        e.preventDefault();
+    // Aqui você pode enviar os dados do formulário para onde for necessário
+        console.log('Nome do Projeto:', nomeProjeto);
+        console.log('Categoria Selecionada:', categoriaSelecionada);
+        console.log('Status Selecionado:', statusSelecionado);
+    };
+
   return (
     <G.GoalContainer>
         <G.Header>
@@ -34,16 +48,37 @@ function Goals() {
         </G.Header>
             
         <G.Filter>
-            <G.Form>
-                <G.Input type="text" placeholder='Procure o porjecto pelo nome'/>
-                <G.Select name="" id="">
-                    {DEFAULT_OPTION_CATEGORIES.map(option => (
-                        <option key={option} value={option}>{option}</option> 
-                    ))}
+            <G.Form onSubmit={handleSubmit}>
+                <G.Input 
+                type="text"
+                id="nomeProjeto"
+                value={nomeProjeto}
+                onChange={(e) => setNomeProjeto(e.target.value)}
+                placeholder='Procure o projecto pelo nome...'/>
+
+                <G.Select 
+                id="categoria"
+                value={categoriaSelecionada}
+                onChange={(e) => setCategoriaSelecionada(e.target.value)}
+                >
+                    <option value="">Selecione uma categoria...</option>
+                        {DEFAULT_OPTION_CATEGORIES.map((categoria, index) => (
+                            <option key={index} value={categoria}>
+                                {categoria}
+                            </option>
+            ))}
                 </G.Select>
-                <G.Select name="" id="">
-                    {DEFAULT_OPTION_STATUS.map(option => (
-                        <option key={option} value={"Ola"}>{option}</option> 
+                
+                <G.Select 
+                 id="status"
+                 value={statusSelecionado}
+                 onChange={(e) => setStatusSelecionado(e.target.value)}
+                 >
+                    <option value="">Selecione um status...</option>
+                    {DEFAULT_OPTION_STATUS.map((estado, index) => (
+                    <option key={index} value={estado}>
+                    {estado}
+                    </option>
                     ))}
                 </G.Select>
                 <G.ButtonSubmit type="submit">Procurar</G.ButtonSubmit>
