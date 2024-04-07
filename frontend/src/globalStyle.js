@@ -17,9 +17,23 @@ body{
     font-family: sans-serif;
 }
 
-input, select, button {
+input, select, button{
     outline: none;
     border: none;
+    background-color: transparent;
+}
+textarea{
+    resize: none;
+    overflow: hidden;
+    border: none;
+    outline: none;
+    background-color: transparent;
+}
+button{
+    color: #888;
+}
+li{
+    list-style: none;
 }
 
 

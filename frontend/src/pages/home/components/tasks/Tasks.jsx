@@ -1,20 +1,30 @@
 import * as T from './Tasks';
+import PropTypes from 'prop-types';
 import { useState } from 'react';
-import { IoAddOutline, IoTrash } from 'react-icons/io5';
+import { Link } from 'react-router-dom'
+import { IoAddOutline, IoTrash, IoOptionsOutline, IoReloadOutline, IoCloseCircleOutline, IoRadioButtonOffOutline, IoRadioButtonOnSharp  } from 'react-icons/io5';
 import { FaRegCircle, FaRegCheckCircle } from 'react-icons/fa';
 import { CiEdit } from 'react-icons/ci';
 
-function Tasks() {
+const options = [
+  { name: 'Passos de Bebê', times: { 1: 10, 2: 5, 3: 10 } },
+  { name: 'Popular', times: { 1: 20, 2: 5, 3: 15 } },
+  { name: 'Médio', times: { 1: 40, 2: 8, 3: 20 } },
+  { name: 'Extendido', times: { 1: 60, 2: 10, 3: 25 } }
+];
+
+function Tasks({ onSelectPomodoro }) {
   const [task, setTask] = useState([]);
   const [viewForm, setViewForm] = useState(false);
   const [nomeTarefa, setNomeTarefa] = useState('');
   const [editIndex, setEditIndex] = useState(null);
+  const [personalizeModal, setPersonalizeModal] = useState(false)
+  const [selectedOption, setSelectedOption] = useState(null);
 
   const handleAdicionarTarefa = () => {
     setViewForm(true);
     setEditIndex(null);
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (editIndex !== null) {
@@ -28,31 +38,73 @@ function Tasks() {
     setNomeTarefa('');
     setViewForm(false);
   };
-
   const toggleConcluirTarefa = (index) => {
     const novasTarefas = [...task];
     novasTarefas[index] = { ...novasTarefas[index], concluida: !novasTarefas[index].concluida };
     setTask(novasTarefas);
   };
-
   const handleEditarTarefa = (index) => {
     setNomeTarefa(task[index].nome);
     setEditIndex(index);
     setViewForm(true);
   };
-
   const handleExcluirTarefa = (index) => {
     const novasTarefas = [...task];
     novasTarefas.splice(index, 1);
     setTask(novasTarefas);
   };
+  const handlePersonalizeOpen = () => {
+    setPersonalizeModal(true) 
+  }
+  const handlePersonalizeClose = () => {
+    setPersonalizeModal(false)
+  }
+
+  const handleSelectPomodoro = (option) => {
+    onSelectPomodoro(option.times);
+    setSelectedOption(option);
+  };
+
 
   return (
     <T.TasksContainer>
-      <T.Hour>
-        <span>7:06 PM</span>
-        <p>{task.filter((tarefa) => tarefa.concluida).length} tarefa(s) concluída(s)</p>
-      </T.Hour>
+      <T.Config>
+          <T.Options>
+            <i><IoOptionsOutline /></i>        
+            <T.Option onClick={handlePersonalizeOpen}>Personalizar</T.Option>
+          </T.Options>        
+          <T.Options>
+            <i><IoReloadOutline /></i>        
+            <T.Option>Reiniciar</T.Option>
+          </T.Options>        
+          <T.Options>
+            <Link to={"/projects"}>
+              <T.Project>Escolher Projectos</T.Project>
+            </Link>
+          </T.Options>        
+          <T.PersonalizeModal open={personalizeModal}>              
+            <T.ModalHeader>
+              <h3>Escolha o Nivel nivel de Foco</h3>
+              <i><IoCloseCircleOutline onClick={handlePersonalizeClose} /></i>
+            </T.ModalHeader>
+            <T.FocusLevel>
+            {options.map((option, index) => (
+              <T.Level key={index} onClick={() =>  handleSelectPomodoro(option)}>
+                  <T.OptionLevel>
+                    <p>
+                      {selectedOption === option ? <i><IoRadioButtonOnSharp  color="green" /></i>  : <i><IoRadioButtonOffOutline /></i>}
+                      {option.name}
+                    </p>
+                    <span>
+                    {option.times[1]}min . {option.times[2]}min . {option.times[3]}min
+                    </span>
+
+                  </T.OptionLevel>
+              </T.Level>
+            ))}
+            </T.FocusLevel>
+          </T.PersonalizeModal>
+      </T.Config>
 
       <T.Content>
         <T.Header>
@@ -111,5 +163,15 @@ function Tasks() {
     </T.TasksContainer>
   );
 }
+
+
+Tasks.propTypes = {
+  onSelectPomodoro: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    focusTime: PropTypes.number.isRequired,
+    shortBreak: PropTypes.number.isRequired,
+    longBreak: PropTypes.number.isRequired
+  })
+};
 
 export default Tasks;

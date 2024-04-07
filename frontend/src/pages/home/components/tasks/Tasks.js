@@ -11,25 +11,153 @@ export const TasksContainer = styled.div`
     justify-content: center;
 
 `
-
-export const Hour = styled.div`
+export const Config = styled.ul`
   width: 100%;
-  padding: 15px;
+  padding: 10px;
   background-color: rgba(0,0,0, 0.50);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   border-radius: 5px;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: space-evenly;
+  gap: 10px;
 
-
-  span{
-    font-size: 30px;
-    font-weight: bold;
+  position: relative;
+`
+export const Options = styled.li`
+  list-style: none;
+  color: #888;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  transition: all.4s ease-in-out;
+  
+  &:hover{
+    cursor: pointer;
+    color: #fff;
   }
 `
 
+export const Option = styled.p`
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer; 
+`
+export const PersonalizeModal = styled.div`
+  position: absolute;
+  top: 50px;
+  right: 270px;
+  z-index: 2;
+
+  width: 350px;
+  height: fit-content;
+  border-radius: 10px;
+  background-color: #111;
+  padding: 15px;
+
+  display: ${({open}) => (open ? 'flex' : 'none')};
+  flex-direction: column;
+  align-items: start;
+  gap: 15px;
+`
+export const ModalHeader = styled.div`
+  width: 100%;
+  display: flex ;
+  align-items: center;
+  justify-content: space-between;
+  i{
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+    cursor: pointer;
+  }
+
+`
+
+export const FocusLevel = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+  gap: 20px;
+`
+export const Level = styled.button`
+  font-size: 16px;
+  cursor: pointer;
+`
+export const OptionLevel = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+  
+
+
+  p{
+    font-weight: 700;
+    display:flex ;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    
+    i{
+      font-size: 22px;
+    }
+  }
+
+  span{
+    margin-top: 5px;
+    padding-inline-start: 25px;
+  }
+`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export const Project = styled.button`
+  font-size: 16px;
+  padding: 7px 10px;
+  border-radius: 7px;
+  
+  color: #888;
+  width: 100%;
+  height: 100%;
+  transition: .4s ease-in-out;
+  cursor: pointer; 
+
+  
+  
+  &:hover{
+      color: #fff;
+      background-color: rgb(0, 113, 255);
+    }
+`
 export const Content = styled.div`
   width: 100%;
   padding: 10px;
@@ -57,7 +185,6 @@ export const Tasks = styled.ul`
     flex-direction: column;
     gap:10px;
 `
-
 export const Task = styled.li`
     display: flex;
     gap: 5px;
@@ -108,11 +235,6 @@ export const Input = styled.textarea`
   width: 100%;
   padding: 12px;
   font-size: 16px;
-  resize: none;
-  overflow: hidden;
-  border: none;
-  outline: none;
-  background-color: transparent;
   color: #fff;
 
 `
@@ -137,7 +259,6 @@ export const ButtonAdd = styled.button`
  }
 `
 export const ButtonCancelar = styled.button`
- background-color: transparent;
  color: #777;
  transition: .4s ease-in;
 
@@ -176,14 +297,12 @@ export const NewTask= styled.div`
   gap: 10px;
 
   button{
-    background-color: transparent;
     color: #fff;
     font-size: 18px;
     display: flex;
     align-items: center;
   }
 `
-
 export const ButtonMore = styled.div`
   display: flex;
   gap: 7px;
@@ -197,7 +316,6 @@ export const ButtonMore = styled.div`
     padding: 5px;
     cursor: pointer;
     clip-path: circle();
-    background-color: transparent;
     color: #777;
 
     &:hover{
