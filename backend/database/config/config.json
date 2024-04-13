@@ -1,8 +1,8 @@
 {
   "development": {
-    "username": "root",
+    "username": "postgres",
     "password": "CarlosSoares2004@",
-    "database": "database_development",
+    "database": "TimeWiseDB",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
