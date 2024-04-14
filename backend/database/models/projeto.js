@@ -18,8 +18,6 @@ module.exports = (sequelize, DataTypes) => {
     idUsuario: DataTypes.INTEGER,
     nome: DataTypes.STRING,
     descricao: DataTypes.STRING,
-    dataCriacao: DataTypes.DATE,
-    dataUltimaAtualizacao: DataTypes.DATE,
     status: DataTypes.STRING
   }, {
     sequelize,

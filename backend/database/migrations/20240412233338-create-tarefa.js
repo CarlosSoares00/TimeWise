@@ -24,12 +24,6 @@ module.exports = {
       pontos: {
         type: Sequelize.INTEGER
       },
-      dataCriacao: {
-        type: Sequelize.DATE
-      },
-      dataUltimaAtualizacao: {
-        type: Sequelize.DATE
-      },
       status: {
         type: Sequelize.STRING
       },

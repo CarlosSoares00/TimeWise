@@ -18,12 +18,6 @@ module.exports = {
       senha: {
         type: Sequelize.STRING
       },
-      dataCriacao: {
-        type: Sequelize.DATE
-      },
-      dataUltimaAtualizacao: {
-        type: Sequelize.DATE
-      },
       tipoAssinatura: {
         type: Sequelize.STRING
       },

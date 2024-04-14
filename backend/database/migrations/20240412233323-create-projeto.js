@@ -18,12 +18,7 @@ module.exports = {
       descricao: {
         type: Sequelize.STRING
       },
-      dataCriacao: {
-        type: Sequelize.DATE
-      },
-      dataUltimaAtualizacao: {
-        type: Sequelize.DATE
-      },
+      
       status: {
         type: Sequelize.STRING
       },
