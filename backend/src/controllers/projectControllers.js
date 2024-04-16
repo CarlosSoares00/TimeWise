@@ -2,6 +2,7 @@ const { Projeto } = require('../../database/models');
 
 const Joi = require("Joi");
 
+// Nomes das variaveis locais são escritas em Ingles, e coisas do banco de dados em portugues
 
 const ProjectControllers = {
   createProject: async (req, res) => {
@@ -11,27 +12,27 @@ const ProjectControllers = {
       const { titulo, categoria, descricao, status, totalPomodoro } = req.body
 
       const schema = Joi.object({
-          titulo: Joi.string().required(),
-          categoria: Joi.string().required(),
-          descricao: Joi.string().required(),
-          status: Joi.string().required(),
-          totalPomodoro: Joi.number().required()
-      })
+        titulo: Joi.string().trim().required(),
+        categoria: Joi.string().trim().required(),
+        descricao: Joi.string().trim().required(),
+        status: Joi.string().valid('Completo', 'InCompleto').required(),
+        totalPomodoro: Joi.number().required()
+      });
       const { error } = schema.validate(req.body)
       if(error){
           return res.status(409).json({error: error.details[0].message})
       }
 
-      const projectExist = await Projeto.findOne({ where: {titulo}})
+      const projectExist = await Projeto.findOne({ where: {titulo: titulo.trim()}})
       if(projectExist) {
         return res.status(409).json({ message: 'Titulo invalido ou existente.'})
       }
 
       const newProject = await Projeto.create({
         idUsuario: userId,
-        titulo,
-        categoria,
-        descricao,
+        titulo: titulo.trim(),
+        categoria: categoria.trim(),
+        descricao: descricao.trim(),
         status,
         totalPomodoro
       })
@@ -43,11 +44,11 @@ const ProjectControllers = {
         return res.status(500).json({error: 'Erro interno do servidor'})
     }
   },
-  getProjectos: async (req, res) => {
+  getProjects: async (req, res) => {
     try {
 
-      const idUsuario = req.user.userId
-      const projectAll = await Projeto.findAll({ where: { idUsuario } })
+      const userId = req.user.userId
+      const projectAll = await Projeto.findAll({ where: { idUsuario: userId } })
       return res.status(200).json(projectAll)
       
     } catch (error) {
@@ -57,20 +58,19 @@ const ProjectControllers = {
   },
   getProjectosStatus: async (req, res) => {
     try {
-      const idUsuario = req.user.userId
-
+      const userId = req.user.userId
       const { status } = req.body
 
-      if (status !== "Completo" && status !== "InCompleto") {
-        return res.status(404).json({erro: "Por favor escolha uma opcao valida."})
+      if (!['Completo', 'InCompleto'].includes(status)) {
+        return res.status(404).json({ error: "Por favor, escolha uma opção válida." });
       }
 
-        const projectCompleto = await Projeto.findAll({ where: {
-          idUsuario,
+        const fullProject = await Projeto.findAll({ where: {
+          idUsuario: userId,
           status: status
         }})
         
-      return res.status(200).json(projectCompleto)
+      return res.status(200).json(fullProject)
     } catch (error) {
       console.error(error)
       return res.status(500).json({error: "Erro interno do Servidor"})
@@ -86,12 +86,12 @@ const ProjectControllers = {
       }
 
       const schema = Joi.object({
-        titulo: Joi.string().required(),
-        categoria: Joi.string().required(),
-        descricao: Joi.string().required(),
-        status: Joi.string().required(),
+        titulo: Joi.string().trim().required(),
+        categoria: Joi.string().trim().required(),
+        descricao: Joi.string().trim().required(),
+        status: Joi.string().valid('Completo', 'InCompleto').required(),
         totalPomodoro: Joi.number().required()
-      })
+      });
       const { error } = schema.validate(req.body)
       if(error){
         return res.status(409).json({error: error.details[0].message})
@@ -109,7 +109,7 @@ const ProjectControllers = {
       return res.status(400).json({error: "Erro interno no servidor."})
     }
   },
-            deleteProject: async (req, res) => {
+  deleteProject: async (req, res) => {
     try {
       const idProject = req.params.idProject
 
