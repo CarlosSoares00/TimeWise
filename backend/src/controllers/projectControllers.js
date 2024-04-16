@@ -14,7 +14,7 @@ const validateProjectInput = (data) => {
   return schema.validate(data);
 };
 
-const ProjectControllers = {
+const ProjectController = {
   createProject: async (req, res) => {
     try {
       const userId = req.user.userId
@@ -100,7 +100,7 @@ const ProjectControllers = {
       const project = await Projeto.findByPk(idProject)
       if(!project)return res.status(404).json({error: "O projecto não foi encontrado"})
 
-      await Projeto.destroy({ where: { id: idProject }})
+      await Projeto.destroy({ where: { id: idProject } })
       return res.status(404).json({message: "Projecto eliminado com sucesso."})
     } catch (error) {
       console.error(error)

@@ -2,13 +2,13 @@ const express = require('express')
 const router = express.Router()
 
 const verifyToken = require('../middlewares/authMiddleware')
-const projectControllers = require('../controllers/projectControllers')
+const projectController = require('../controllers/projectControllers')
 
-router.post('/user/project/create', verifyToken, projectControllers.createProject)
-router.get('/user/project/getAll', verifyToken, projectControllers.getProjectos)
-router.post('/user/project/getCompleted', verifyToken, projectControllers.getProjectosStatus)
-router.put('/user/project/:idProject', verifyToken, projectControllers.editProject)
-router.delete('/user/project/:idProject', verifyToken, projectControllers.deleteProject)
+router.post('/user/project/create', verifyToken, projectController.createProject)
+router.get('/user/project/getAll', verifyToken, projectController.getProjects)
+router.post('/user/project/getCompleted', verifyToken, projectController.getProjectosStatus)
+router.put('/user/project/:idProject', verifyToken, projectController.editProject)
+router.delete('/user/project/:idProject', verifyToken, projectController.deleteProject)
 
 
 module.exports = router
