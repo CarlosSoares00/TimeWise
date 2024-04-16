@@ -1,40 +1,35 @@
+// Nomes das variaveis locais são escritas em Ingles, e coisas do banco de dados em portugues
 const { Projeto } = require('../../database/models');
-
 const Joi = require("Joi");
 
-// Nomes das variaveis locais são escritas em Ingles, e coisas do banco de dados em portugues
+
+const validateProjectInput = (data) => {
+  const schema = Joi.object({
+    titulo: Joi.string().trim().required(),
+    categoria: Joi.string().trim().required(),
+    descricao: Joi.string().trim().required(),
+    status: Joi.string().valid('Completo', 'InCompleto').required(),
+    totalPomodoro: Joi.number().required()
+  });
+  return schema.validate(data);
+};
 
 const ProjectControllers = {
   createProject: async (req, res) => {
     try {
       const userId = req.user.userId
 
-      const { titulo, categoria, descricao, status, totalPomodoro } = req.body
-
-      const schema = Joi.object({
-        titulo: Joi.string().trim().required(),
-        categoria: Joi.string().trim().required(),
-        descricao: Joi.string().trim().required(),
-        status: Joi.string().valid('Completo', 'InCompleto').required(),
-        totalPomodoro: Joi.number().required()
-      });
-      const { error } = schema.validate(req.body)
+      const { error } = validateProjectInput(req.body)
       if(error){
           return res.status(409).json({error: error.details[0].message})
       }
 
-      const projectExist = await Projeto.findOne({ where: {titulo: titulo.trim()}})
-      if(projectExist) {
-        return res.status(409).json({ message: 'Titulo invalido ou existente.'})
-      }
+      const projectExist = await Projeto.findOne({ where: {titulo: req.body.titulo.trim()}})
+      if(projectExist) { return res.status(409).json({ message: 'Titulo invalido ou existente.'})}
 
       const newProject = await Projeto.create({
         idUsuario: userId,
-        titulo: titulo.trim(),
-        categoria: categoria.trim(),
-        descricao: descricao.trim(),
-        status,
-        totalPomodoro
+        ...req.body
       })
 
       return res.status(200).json({ message: "Projecto criado com sucesso", newProject})
@@ -46,7 +41,6 @@ const ProjectControllers = {
   },
   getProjects: async (req, res) => {
     try {
-
       const userId = req.user.userId
       const projectAll = await Projeto.findAll({ where: { idUsuario: userId } })
       return res.status(200).json(projectAll)
@@ -65,12 +59,12 @@ const ProjectControllers = {
         return res.status(404).json({ error: "Por favor, escolha uma opção válida." });
       }
 
-        const fullProject = await Projeto.findAll({ where: {
+      const projectsByStatus = await Projeto.findAll({ where: {
           idUsuario: userId,
           status: status
-        }})
+      }})
         
-      return res.status(200).json(fullProject)
+      return res.status(200).json(projectsByStatus)
     } catch (error) {
       console.error(error)
       return res.status(500).json({error: "Erro interno do Servidor"})
@@ -79,20 +73,10 @@ const ProjectControllers = {
   editProject: async (req, res) => {
     try {
       const idProject = req.params.idProject
-
       const project = await Projeto.findByPk(idProject)
-      if(!project) {
-        return res.status(404).json({error: 'Projecto não encontrado'})
-      }
-
-      const schema = Joi.object({
-        titulo: Joi.string().trim().required(),
-        categoria: Joi.string().trim().required(),
-        descricao: Joi.string().trim().required(),
-        status: Joi.string().valid('Completo', 'InCompleto').required(),
-        totalPomodoro: Joi.number().required()
-      });
-      const { error } = schema.validate(req.body)
+      if(!project) return res.status(404).json({error: 'Projecto não encontrado'})
+      
+      const { error } = validateProjectInput(req.body)
       if(error){
         return res.status(409).json({error: error.details[0].message})
       }
@@ -114,11 +98,9 @@ const ProjectControllers = {
       const idProject = req.params.idProject
 
       const project = await Projeto.findByPk(idProject)
-      if(!project){
-        return res.status(404).json({error: "O projecto não foi encontrado"})
-      }
+      if(!project)return res.status(404).json({error: "O projecto não foi encontrado"})
 
-      await Projeto.destroy({where: {id: idProject}})
+      await Projeto.destroy({ where: { id: idProject }})
       return res.status(404).json({message: "Projecto eliminado com sucesso."})
     } catch (error) {
       console.error(error)
