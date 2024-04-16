@@ -5,6 +5,7 @@ const cors = require('cors')
 const morgan = require('morgan')
 
 const authRouter = require('./routes/authRoutes')
+const projectRouter = require('./routes/ProjectRouter')
 
 const app = express()
 app.use(express.json())
@@ -13,5 +14,6 @@ app.use(morgan('dev'))
 
 // Routas
 app.use(authRouter)
+app.use(projectRouter)
 
 module.exports = app

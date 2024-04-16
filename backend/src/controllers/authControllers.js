@@ -13,7 +13,7 @@ const AuthController = {
       // Buscando os dados da requisicao
       const {nome, email, senha, confirmarSenha } = req.body
 
-      // Verificando se o email já existe ou não
+      // Verificando se o emial já existe ou não
       const userExist = await Usuario.findOne({ where: { email } })
       if(userExist){
         return res
@@ -39,12 +39,12 @@ const AuthController = {
         return res.status(409).json({ error: error.details[0].message })
       }
 
-      // Verificando se a senha é igual ao confirmarSenha
+      // Verificando se a password é igual ao confirmedPassword
       if(senha != confirmarSenha) {
-        return res.status(400).json({ error: "As senhas dem ser iguais. "})
+        return res.status(400).json({ error: "As senhas devem ser iguais."})
       }
 
-      //Criando uma Hash para criptar a senha do Usuario
+      //Criando uma Hash para criptar a password do Usuario
       const passwordHash = await bcrypt.hash(senha, 10)
 
       //Utilizando o Sequelize para criar um novo usuario
