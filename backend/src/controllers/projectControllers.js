@@ -1,6 +1,6 @@
 // Nomes das variaveis locais são escritas em Ingles, e coisas do banco de dados em portugues
 const { Projeto } = require('../../database/models');
-const Joi = require("Joi");
+const Joi = require("joi");
 
 
 const validateProjectInput = (data) => {
@@ -70,6 +70,13 @@ const ProjectController = {
       return res.status(500).json({error: "Erro interno do Servidor"})
     }
   },
+  getTaskByProject: async (req, res) =>  {
+    try {
+      
+    } catch (error) {
+      
+    }
+  },
   editProject: async (req, res) => {
     try {
       const idProject = req.params.idProject
@@ -110,4 +117,4 @@ const ProjectController = {
 }
 
 
-module.exports = ProjectControllers
+module.exports = ProjectController
