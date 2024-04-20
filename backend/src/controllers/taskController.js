@@ -1,18 +1,23 @@
 const { Tarefa } = require('../../database/models')
 const Joi = require("joi")
 
+
+const validateTaskInput = (data) => {
+  const schema = Joi.object({
+    titulo: Joi.string().required(),
+    descricao: Joi.string().required(),
+    status: Joi.string().valid('Completo', 'Incompleto').required()
+  })
+  return schema.validate(data)
+}
+
 const TaskController = {
   createTask: async (req, res) => {
     try {
       const projectId = req.params.projectId
       const { titulo, descricao, status } = req.body
 
-      const schema = Joi.object({
-        titulo: Joi.string().required(),
-        descricao: Joi.string().required(),
-        status: Joi.string().valid('Completo', 'Incompleto').required()
-      })
-      const { error } = schema.validate(req.body)
+      const { error } = validateTaskInput(req.body)
       if(error){
         return res.status(400).josn({ error: error.details[0].message })
       }
@@ -66,12 +71,7 @@ const TaskController = {
       const { titulo, descricao, status } = req.body;
 
       // Validação dos dados de entrada
-      const schema = Joi.object({
-        titulo: Joi.string().trim().required(),
-        descricao: Joi.string().trim().required(),
-        status: Joi.string().valid('Completo', 'Incompleto').required()
-      });
-      const { error } = schema.validate(req.body);
+      const { error } = validateTaskInput(req.body)
       if (error) {
         return res.status(400).json({ error: error.details[0].message });
       } 
