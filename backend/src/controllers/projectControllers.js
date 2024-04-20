@@ -70,13 +70,6 @@ const ProjectController = {
       return res.status(500).json({error: "Erro interno do Servidor"})
     }
   },
-  getTaskByProject: async (req, res) =>  {
-    try {
-      
-    } catch (error) {
-      
-    }
-  },
   editProject: async (req, res) => {
     try {
       const idProject = req.params.idProject
